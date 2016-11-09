@@ -1,0 +1,6 @@
+/*.vshost.*
+/*.pdb
+/Sources/obj
+/Sources/*.suo
+/.project
+MusicSynchronizer.exe
