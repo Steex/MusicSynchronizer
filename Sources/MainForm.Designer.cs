@@ -81,13 +81,6 @@
 			this.textPlaylists.Size = new System.Drawing.Size(495, 90);
 			this.textPlaylists.TabIndex = 0;
 			this.textPlaylists.Text = "E:\\Media\\Playlists\\_______test1.m3u8\r\nE:\\Media\\Playlists\\_______test2.m3u";
-			this.textPlaylists.DragDrop += new System.Windows.Forms.DragEventHandler(this.textPlaylists_DragDrop);
-			this.textPlaylists.DragEnter += new System.Windows.Forms.DragEventHandler(this.textPlaylists_DragEnter);
-			this.textPlaylists.DragOver += new System.Windows.Forms.DragEventHandler(this.textPlaylists_DragOver);
-			this.textPlaylists.DragLeave += new System.EventHandler(this.textPlaylists_DragLeave);
-			this.textPlaylists.GiveFeedback += new System.Windows.Forms.GiveFeedbackEventHandler(this.textPlaylists_GiveFeedback);
-			this.textPlaylists.QueryContinueDrag += new System.Windows.Forms.QueryContinueDragEventHandler(this.textPlaylists_QueryContinueDrag);
-			this.textPlaylists.MouseMove += new System.Windows.Forms.MouseEventHandler(this.textPlaylists_MouseMove);
 			// 
 			// label3
 			// 
@@ -110,13 +103,17 @@
 			// 
 			// textLog
 			// 
-			this.textLog.AllowDrop = true;
-			this.textLog.Location = new System.Drawing.Point(12, 314);
+			this.textLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textLog.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.textLog.Location = new System.Drawing.Point(12, 474);
 			this.textLog.Multiline = true;
 			this.textLog.Name = "textLog";
-			this.textLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textLog.Size = new System.Drawing.Size(495, 297);
+			this.textLog.ReadOnly = true;
+			this.textLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.textLog.Size = new System.Drawing.Size(782, 132);
 			this.textLog.TabIndex = 0;
+			this.textLog.WordWrap = false;
 			// 
 			// MainForm
 			// 
@@ -148,6 +145,8 @@
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Button buttonCompare;
 		private System.Windows.Forms.TextBox textLog;
+
+
 	}
 }
 

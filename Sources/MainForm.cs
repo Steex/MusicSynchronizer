@@ -5,9 +5,9 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 using System.IO;
-using Aliasworlds;
+using System.Windows.Forms;
+using System.Net;
 
 namespace MusicSynchronizer
 {
@@ -16,6 +16,10 @@ namespace MusicSynchronizer
 		public MainForm()
 		{
 			InitializeComponent();
+
+			// Log into text view.
+			Logger.OnWrite += (level, message) => textLog.Invoke((MethodInvoker)delegate { textLog.AppendText(message); });
+			Logger.OnClear += () => textLog.Invoke((MethodInvoker)delegate { textLog.Clear(); });
 		}
 
 		private void buttonCompare_Click(object sender, EventArgs e)
@@ -41,57 +45,5 @@ namespace MusicSynchronizer
 			//    targetSongs.Add(Utils.GetRelativePath(targetSong, textMusicTargetRoot.Text));
 			//}
 		}
-
-		private void textPlaylists_DragEnter(object sender, DragEventArgs e)
-		{
-			textLog.AppendText(string.Format("Enter\teffect = {0}\r\n", e.Effect.ToString()));
-			//e.Effect = DragDropEffects.Link;
-		}
-
-		private void textPlaylists_DragLeave(object sender, EventArgs e)
-		{
-			textLog.AppendText("Leave\r\n");
-		}
-
-		private void textPlaylists_DragOver(object sender, DragEventArgs e)
-		{
-			textLog.AppendText(string.Format("Over\teffect = {0}\r\n", e.Effect.ToString()));
-
-			Point clientMouse = textPlaylists.PointToClient(new Point(e.X, e.Y));
-
-			if (clientMouse.X > 300)
-			{
-				e.Effect = DragDropEffects.Link;
-			}
-			else
-			{
-				e.Effect = DragDropEffects.None;
-			}
-		}
-
-		private void textPlaylists_DragDrop(object sender, DragEventArgs e)
-		{
-			textLog.AppendText(string.Format("Drop\teffect = {0}\r\n", e.Effect.ToString()));
-		}
-
-		private void textPlaylists_GiveFeedback(object sender, GiveFeedbackEventArgs e)
-		{
-			textLog.AppendText(string.Format("GiveFeedback\teffect = {0}\r\n", e.Effect.ToString()));
-		}
-
-		private void textPlaylists_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
-		{
-			textLog.AppendText(string.Format("QueryContinueDrag\taction = {0}\r\n", e.Action.ToString()));
-		}
-
-		private void textPlaylists_MouseMove(object sender, MouseEventArgs e)
-		{
-			if (e.Button == MouseButtons.Left)
-			{
-				DoDragDrop(sender, DragDropEffects.All);
-			}
-		}
-
 	}
-
 }
