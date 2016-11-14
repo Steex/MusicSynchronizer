@@ -44,7 +44,7 @@
 			this.textMusicSourceRoot.Name = "textMusicSourceRoot";
 			this.textMusicSourceRoot.Size = new System.Drawing.Size(495, 20);
 			this.textMusicSourceRoot.TabIndex = 0;
-			this.textMusicSourceRoot.Text = "E:\\Media\\Music";
+			this.textMusicSourceRoot.Text = "E:\\_MS_Test\\Source";
 			// 
 			// label1
 			// 
@@ -61,7 +61,7 @@
 			this.textMusicTargetRoot.Name = "textMusicTargetRoot";
 			this.textMusicTargetRoot.Size = new System.Drawing.Size(495, 20);
 			this.textMusicTargetRoot.TabIndex = 0;
-			this.textMusicTargetRoot.Text = "E:\\_Music phone";
+			this.textMusicTargetRoot.Text = "E:\\_MS_Test\\Target";
 			// 
 			// label2
 			// 
@@ -80,7 +80,7 @@
 			this.textPlaylists.Name = "textPlaylists";
 			this.textPlaylists.Size = new System.Drawing.Size(495, 90);
 			this.textPlaylists.TabIndex = 0;
-			this.textPlaylists.Text = "E:\\Media\\Playlists\\_______test1.m3u8\r\nE:\\Media\\Playlists\\_______test2.m3u";
+			this.textPlaylists.Text = "E:\\_MS_Test\\Playlists\\list-1.m3u8\r\nE:\\_MS_Test\\Playlists\\list-2.m3u";
 			// 
 			// label3
 			// 
@@ -103,15 +103,16 @@
 			// 
 			// textLog
 			// 
-			this.textLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.textLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textLog.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.textLog.Location = new System.Drawing.Point(12, 474);
+			this.textLog.Location = new System.Drawing.Point(12, 324);
 			this.textLog.Multiline = true;
 			this.textLog.Name = "textLog";
 			this.textLog.ReadOnly = true;
 			this.textLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.textLog.Size = new System.Drawing.Size(782, 132);
+			this.textLog.Size = new System.Drawing.Size(757, 282);
 			this.textLog.TabIndex = 0;
 			this.textLog.WordWrap = false;
 			// 
@@ -119,7 +120,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(806, 623);
+			this.ClientSize = new System.Drawing.Size(781, 623);
 			this.Controls.Add(this.buttonCompare);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);

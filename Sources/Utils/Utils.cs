@@ -226,9 +226,27 @@ namespace MusicSynchronizer
 		}
 
 
+		public static bool IsPathRelative(string path, string root)
+		{
+			if (string.IsNullOrWhiteSpace(root))
+			{
+				return false;
+			}
+
+			path = path.Replace('\\', '/');
+			root = root.Replace('\\', '/');
+
+			if (!root.EndsWith("/"))
+			{
+				root += '/';
+			}
+
+			return path.StartsWith(root, StringComparison.InvariantCultureIgnoreCase);
+		}
+
 		public static string GetRelativePath(string path, string root)
 		{
-			if (root == null || root.Length == 0)
+			if (string.IsNullOrWhiteSpace(root))
 			{
 				return path;
 			}
