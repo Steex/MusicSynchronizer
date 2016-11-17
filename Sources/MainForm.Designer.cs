@@ -36,6 +36,7 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.buttonCompare = new System.Windows.Forms.Button();
 			this.textLog = new System.Windows.Forms.TextBox();
+			this.buttonConvert = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// textMusicSourceRoot
@@ -61,7 +62,7 @@
 			this.textMusicTargetRoot.Name = "textMusicTargetRoot";
 			this.textMusicTargetRoot.Size = new System.Drawing.Size(495, 20);
 			this.textMusicTargetRoot.TabIndex = 0;
-			this.textMusicTargetRoot.Text = "E:\\_MS_Test\\Target";
+			this.textMusicTargetRoot.Text = "E:\\_MS_Test\\Target - Copy";
 			// 
 			// label2
 			// 
@@ -93,7 +94,7 @@
 			// 
 			// buttonCompare
 			// 
-			this.buttonCompare.Location = new System.Drawing.Point(435, 252);
+			this.buttonCompare.Location = new System.Drawing.Point(435, 222);
 			this.buttonCompare.Name = "buttonCompare";
 			this.buttonCompare.Size = new System.Drawing.Size(75, 23);
 			this.buttonCompare.TabIndex = 2;
@@ -116,11 +117,22 @@
 			this.textLog.TabIndex = 0;
 			this.textLog.WordWrap = false;
 			// 
+			// buttonConvert
+			// 
+			this.buttonConvert.Location = new System.Drawing.Point(435, 251);
+			this.buttonConvert.Name = "buttonConvert";
+			this.buttonConvert.Size = new System.Drawing.Size(75, 23);
+			this.buttonConvert.TabIndex = 2;
+			this.buttonConvert.Text = "Convert";
+			this.buttonConvert.UseVisualStyleBackColor = true;
+			this.buttonConvert.Click += new System.EventHandler(this.buttonConvert_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(781, 623);
+			this.Controls.Add(this.buttonConvert);
 			this.Controls.Add(this.buttonCompare);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);
@@ -146,6 +158,7 @@
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Button buttonCompare;
 		private System.Windows.Forms.TextBox textLog;
+		private System.Windows.Forms.Button buttonConvert;
 
 
 	}

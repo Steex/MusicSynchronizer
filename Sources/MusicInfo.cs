@@ -52,9 +52,18 @@ namespace MusicSynchronizer
 
 	public class MusicComparer
 	{
-		private HashSet<string> songExtensions = new HashSet<string>{ ".mp3", ".ogg", ".wma", ".aac", ".wav", "*.flac", ".ape", ".wv" };
+		private static readonly HashSet<string> songExtensions = new HashSet<string>{ ".mp3", ".ogg", ".wma", ".aac", ".wav", "*.flac", ".ape", ".wv" };
 
 		private List<SongInfo> combinedSongs = new List<SongInfo>();
+
+
+		public IEnumerable<SongInfo> Songs
+		{
+			get
+			{
+				return combinedSongs;
+			}
+		}
 
 
 		public MusicComparer(string sourceRoot, string targetRoot, IEnumerable<string> playlists)

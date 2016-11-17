@@ -13,6 +13,9 @@ namespace MusicSynchronizer
 {
 	public partial class MainForm : Form
 	{
+		private MusicComparer comparer;
+
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -22,28 +25,49 @@ namespace MusicSynchronizer
 			Logger.OnClear += () => textLog.Invoke((MethodInvoker)delegate { textLog.Clear(); });
 		}
 
+
 		private void buttonCompare_Click(object sender, EventArgs e)
 		{
-			MusicComparer comparer = new MusicComparer(textMusicSourceRoot.Text, textMusicTargetRoot.Text, textPlaylists.Lines);
-			//SortedSet<string> sourceSongs = new SortedSet<string>();
-			//SortedSet<string> targetSongs = new SortedSet<string>();
+			Logger.WriteLine("Compare folders...");
 
-			//foreach (string playlistPath in textPlaylists.Lines)
-			//{
-			//    IPlaylistReader playlist = PlaylistReaderFactory.CreateReader(playlistPath);
-			//    if (playlist != null)
-			//    {
-			//        foreach (string song in playlist.Songs)
-			//        {
-			//            sourceSongs.Add(song);
-			//        }
-			//    }
-			//}
+			// Create a worker and show the conversion progress.
+			using (BackgroundWorker worker = BackgroundOperations.CreateComparer())
+			{
+				worker.RunWorkerCompleted += CompareWorker_RunWorkerCompleted;
+				worker.RunWorkerAsync(new BackgroundOperations.CompareArguments(textMusicSourceRoot.Text, textMusicTargetRoot.Text, textPlaylists.Lines));
+			}
+		}
 
-			//foreach (string targetSong in Directory.GetFiles(textMusicTargetRoot.Text, "*", SearchOption.AllDirectories))
-			//{
-			//    targetSongs.Add(Utils.GetRelativePath(targetSong, textMusicTargetRoot.Text));
-			//}
+		private void CompareWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			BackgroundOperations.CompareResult result = (BackgroundOperations.CompareResult)e.Result;
+
+			switch (result.Result)
+			{
+				case BackgroundOperations.OperationResult.Succeeded:
+					Logger.WriteLine("Done");
+					break;
+				case BackgroundOperations.OperationResult.SucceededWithWarnings:
+					Logger.WriteLine("Done with warnings");
+					break;
+				case BackgroundOperations.OperationResult.SucceededWithErrors:
+					Logger.WriteWarning("Done with errors. Subsequent operations may fail.");
+					break;
+				case BackgroundOperations.OperationResult.Failed:
+					Logger.WriteError("Operation has failed with message: \"{0}\"", result.ErrorMessage);
+					break;
+				case BackgroundOperations.OperationResult.Canceled:
+					Logger.WriteError("Canceled by user");
+					break;
+			}
+
+			comparer = result.Comparer;
+		}
+
+
+		private void buttonConvert_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

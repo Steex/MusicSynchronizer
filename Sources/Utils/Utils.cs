@@ -226,6 +226,23 @@ namespace MusicSynchronizer
 		}
 
 
+		public static T Min<T>(T value1, T value2) where T : IComparable
+		{
+			return value1.CompareTo(value2) < 0 ? value1 : value2;
+		}
+
+		public static T Max<T>(T value1, T value2) where T : IComparable
+		{
+			return value1.CompareTo(value2) > 0 ? value1 : value2;
+		}
+
+
+		public static int CalculatePercents(int operationsDone, int operationsTotal)
+		{
+			return (int)(100f * (float)operationsDone / (float)operationsTotal);
+		}
+
+
 		public static bool IsPathRelative(string path, string root)
 		{
 			if (string.IsNullOrWhiteSpace(root))
