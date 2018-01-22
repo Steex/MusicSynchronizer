@@ -50,8 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackgroundOperations\BackgroundOperations.cs" />
-    <Compile Include="MusicInfo.cs" />
+    <Compile Include="Converter\BackgroundOperations.cs" />
+    <Compile Include="Converter\MusicConverter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Converter\MusicInfo.cs" />
     <Compile Include="Playlist\M3uPlaylistReader.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
