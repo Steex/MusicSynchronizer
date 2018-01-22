@@ -45,7 +45,7 @@
 			this.textMusicSourceRoot.Name = "textMusicSourceRoot";
 			this.textMusicSourceRoot.Size = new System.Drawing.Size(495, 20);
 			this.textMusicSourceRoot.TabIndex = 0;
-			this.textMusicSourceRoot.Text = "E:\\_MS_Test\\Source";
+			this.textMusicSourceRoot.Text = "D:\\_MS_Test\\Source";
 			// 
 			// label1
 			// 
@@ -62,7 +62,7 @@
 			this.textMusicTargetRoot.Name = "textMusicTargetRoot";
 			this.textMusicTargetRoot.Size = new System.Drawing.Size(495, 20);
 			this.textMusicTargetRoot.TabIndex = 0;
-			this.textMusicTargetRoot.Text = "E:\\_MS_Test\\Target - Copy";
+			this.textMusicTargetRoot.Text = "D:\\_MS_Test\\Target - Copy";
 			// 
 			// label2
 			// 
@@ -81,7 +81,7 @@
 			this.textPlaylists.Name = "textPlaylists";
 			this.textPlaylists.Size = new System.Drawing.Size(495, 90);
 			this.textPlaylists.TabIndex = 0;
-			this.textPlaylists.Text = "E:\\_MS_Test\\Playlists\\list-1.m3u8\r\nE:\\_MS_Test\\Playlists\\list-2.m3u";
+			this.textPlaylists.Text = "D:\\_MS_Test\\Playlists\\list-1.m3u8\r\nD:\\_MS_Test\\Playlists\\list-2.m3u";
 			// 
 			// label3
 			// 

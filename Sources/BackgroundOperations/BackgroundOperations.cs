@@ -50,11 +50,11 @@ namespace MusicSynchronizer
 
 		public class MusicEraseArguments
 		{
-			public MusicComparer Comparer { get; private set; }
+			public IEnumerable<SongInfo> Songs { get; private set; }
 
-			public MusicEraseArguments(MusicComparer comparer)
+			public MusicEraseArguments(IEnumerable<SongInfo> songs)
 			{
-				Comparer = comparer;
+				Songs = songs;
 			}
 		}
 
@@ -122,7 +122,7 @@ namespace MusicSynchronizer
 		}
 
 
-		public static BackgroundWorker CreateMusicEraser(string sourceRoot, string targetRoot, IEnumerable<string> playlists)
+		public static BackgroundWorker CreateMusicEraser()
 		{
 			BackgroundWorker worker = new BackgroundWorker();
 
@@ -142,10 +142,10 @@ namespace MusicSynchronizer
 
 				OperationResult workResult = OperationResult.Succeeded;
 
-				int songsToDelete = args.Comparer.Songs.Count(s => s.State == SongState.Changed || s.State == SongState.Deleted);
+				int songsToDelete = args.Songs.Count();
 				int songsDeleted = 0;
 
-				foreach (SongInfo song in args.Comparer.Songs.Where(s => s.State == SongState.Changed || s.State == SongState.Deleted))
+				foreach (SongInfo song in args.Songs)
 				{
 					OperationResult stepResult = DeleteSong(song.TargetPath);
 					workResult = Utils.Max(workResult, stepResult);
@@ -155,12 +155,12 @@ namespace MusicSynchronizer
 
 					if (worker.CancellationPending)
 					{
-						e.Result = new MusicEraseResult(workResult, null);
+						e.Result = new MusicEraseResult(OperationResult.Canceled, null);
 						return;
 					}
 				}
 
-				e.Result = new MusicEraseResult(OperationResult.Succeeded, null);
+				e.Result = new MusicEraseResult(workResult, null);
 			}
 			catch (Exception ex)
 			{
@@ -199,7 +199,7 @@ namespace MusicSynchronizer
 		}
 
 
-		public static BackgroundWorker CreateMusicConverter(string sourceRoot, string targetRoot, IEnumerable<string> playlists)
+		public static BackgroundWorker CreateMusicConverter()
 		{
 			BackgroundWorker worker = new BackgroundWorker();
 
@@ -219,12 +219,12 @@ namespace MusicSynchronizer
 
 				OperationResult workResult = OperationResult.Succeeded;
 
-				int songsToConvert = args.Comparer.Songs.Count(s => s.State == SongState.Changed || s.State == SongState.Deleted);
+				int songsToConvert = args.Comparer.Songs.Count(s => s.State == SongState.New || s.State == SongState.Changed);
 				int songsConverted = 0;
 
-				foreach (SongInfo song in args.Comparer.Songs.Where(s => s.State == SongState.Changed || s.State == SongState.Deleted))
+				foreach (SongInfo song in args.Comparer.Songs.Where(s => s.State == SongState.New || s.State == SongState.Changed))
 				{
-					OperationResult stepResult = ConvertSong(song);
+					OperationResult stepResult = ConvertSong(song.SourcePath, song.TargetPath);
 					workResult = Utils.Max(workResult, stepResult);
 
 					songsConverted += 1;
@@ -232,12 +232,12 @@ namespace MusicSynchronizer
 
 					if (worker.CancellationPending)
 					{
-						e.Result = new MusicConvertResult(workResult, null);
+						e.Result = new MusicConvertResult(OperationResult.Canceled, null);
 						return;
 					}
 				}
 
-				e.Result = new MusicConvertResult(OperationResult.Succeeded, null);
+				e.Result = new MusicConvertResult(workResult, null);
 			}
 			catch (Exception ex)
 			{
@@ -245,36 +245,40 @@ namespace MusicSynchronizer
 			}
 		}
 
-		private static OperationResult ConvertSong(SongInfo song)
+		private static OperationResult ConvertSong(string sourcePath, string targetPath)
 		{
-			return OperationResult.Succeeded;
-
-			/*try
+			try
 			{
-				File.Delete(path);
-				Logger.WriteLine("Successfully deleted \"{0}\"", path);
+				Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
+				File.Copy(sourcePath, targetPath, true);
+				Logger.WriteLine("Successfully written \"{0}\"", targetPath);
 				return OperationResult.Succeeded;
 			}
 			catch (DirectoryNotFoundException)
 			{
-				Logger.WriteWarning("Cannot find \"{0}\"", path);
+				Logger.WriteWarning("Cannot find the source or target directory for \"{0}\"", sourcePath);
+				return OperationResult.SucceededWithWarnings;
+			}
+			catch (FileNotFoundException)
+			{
+				Logger.WriteWarning("Cannot find \"{0}\"", sourcePath);
 				return OperationResult.SucceededWithWarnings;
 			}
 			catch (IOException)
 			{
-				Logger.WriteError("Cannot delete \"{0}\": the file is in use.", path);
+				Logger.WriteError("Cannot write \"{0}\": the file is in use.", sourcePath);
 				return OperationResult.SucceededWithErrors;
 			}
 			catch (UnauthorizedAccessException)
 			{
-				Logger.WriteError("Cannot delete \"{0}\": the user does not have the required permission.", path);
+				Logger.WriteError("Cannot write \"{0}\": the user does not have the required permission.", targetPath);
 				return OperationResult.SucceededWithErrors;
 			}
 			catch (Exception ex)
 			{
-				Logger.WriteError("Cannot delete \"{0}\": {1}", path, ex.Message);
+				Logger.WriteError("Cannot convert \"{0}\": {1}", sourcePath, ex.Message);
 				return OperationResult.SucceededWithErrors;
-			}*/
+			}
 		}
 
 

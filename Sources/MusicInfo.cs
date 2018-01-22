@@ -121,7 +121,7 @@ namespace MusicSynchronizer
 				}
 				else if (!hasTarget)
 				{
-					combinedSongs.Add(new SongInfo(itSource.Current.Key, itSource.Current.Value, ""));
+					combinedSongs.Add(new SongInfo(itSource.Current.Key, itSource.Current.Value, Path.Combine(targetRoot, itSource.Current.Key) + ".mp3"));
 					hasSource = itSource.MoveNext();
 				}
 				else
@@ -129,7 +129,7 @@ namespace MusicSynchronizer
 					int compareResult = string.Compare(itSource.Current.Key, itTarget.Current.Key, true);
 					if (compareResult < 0)
 					{
-						combinedSongs.Add(new SongInfo(itSource.Current.Key, itSource.Current.Value, ""));
+						combinedSongs.Add(new SongInfo(itSource.Current.Key, itSource.Current.Value, Path.Combine(targetRoot, itSource.Current.Key) + ".mp3"));
 						hasSource = itSource.MoveNext();
 					}
 					else if (compareResult > 0)
