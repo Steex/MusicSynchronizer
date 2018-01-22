@@ -42,24 +42,7 @@ namespace MusicSynchronizer
 		{
 			BackgroundOperations.CompareResult result = (BackgroundOperations.CompareResult)e.Result;
 
-			switch (result.Result)
-			{
-				case BackgroundOperations.OperationResult.Succeeded:
-					Logger.WriteLine("Done");
-					break;
-				case BackgroundOperations.OperationResult.SucceededWithWarnings:
-					Logger.WriteLine("Done with warnings");
-					break;
-				case BackgroundOperations.OperationResult.SucceededWithErrors:
-					Logger.WriteWarning("Done with errors. Subsequent operations may fail.");
-					break;
-				case BackgroundOperations.OperationResult.Failed:
-					Logger.WriteError("Operation has failed with message: \"{0}\"", result.ErrorMessage);
-					break;
-				case BackgroundOperations.OperationResult.Canceled:
-					Logger.WriteError("Canceled by user");
-					break;
-			}
+			BackgroundOperations.LogResult(result.Result, result.ErrorMessage);
 
 			comparer = result.Comparer;
 		}

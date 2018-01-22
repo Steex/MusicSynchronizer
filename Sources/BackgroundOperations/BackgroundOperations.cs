@@ -277,5 +277,28 @@ namespace MusicSynchronizer
 			}*/
 		}
 
+
+		public static void LogResult(OperationResult result, string errorMesage = null)
+		{
+			switch (result)
+			{
+				case OperationResult.Succeeded:
+					Logger.WriteLine("Done");
+					break;
+				case OperationResult.SucceededWithWarnings:
+					Logger.WriteLine("Done with warnings");
+					break;
+				case OperationResult.SucceededWithErrors:
+					Logger.WriteWarning("Done with errors. Subsequent operations may fail.");
+					break;
+				case OperationResult.Failed:
+					Logger.WriteError("Operation has failed with message: \"{0}\"", errorMesage);
+					break;
+				case OperationResult.Canceled:
+					Logger.WriteError("Canceled by user");
+					break;
+			}
+		}
+
 	}
 }
