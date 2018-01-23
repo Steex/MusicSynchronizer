@@ -313,7 +313,21 @@ namespace MusicSynchronizer
 
 		private static OperationResult DecodeFlac(string sourcePath, string tmpPath)
 		{
-			return CopySong(sourcePath, tmpPath);
+			ProcessStartInfo decodeInfo = new ProcessStartInfo();
+			decodeInfo.FileName = @"D:\Programs\Multimedia\FLAC\flac.exe";
+			decodeInfo.Arguments = string.Format("-d -f -F -o \"{1}\" \"{0}\"", sourcePath, tmpPath);
+			decodeInfo.CreateNoWindow = true;
+			decodeInfo.UseShellExecute = false;
+			decodeInfo.RedirectStandardOutput = true;
+			decodeInfo.RedirectStandardError = true;
+
+			Process decodeProcess = Process.Start(decodeInfo);
+			decodeProcess.WaitForExit();
+
+			string outText = decodeProcess.StandardOutput.ReadToEnd();
+			string errText = decodeProcess.StandardError.ReadToEnd();
+
+			return decodeProcess.ExitCode == 0 ? OperationResult.Succeeded : OperationResult.SucceededWithErrors;
 		}
 
 		private static OperationResult EncodeMp3(string tmpPath, string targetPath)
