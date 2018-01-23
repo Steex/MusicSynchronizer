@@ -11,7 +11,7 @@ using System.Net;
 
 namespace MusicSynchronizer
 {
-	public class MusicConverter : Form
+	public class MusicConverter
 	{
 		public event EventHandler OnCompared;
 		public event EventHandler OnConverted;

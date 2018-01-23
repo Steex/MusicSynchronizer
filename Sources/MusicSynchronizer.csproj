@@ -51,9 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converter\BackgroundOperations.cs" />
-    <Compile Include="Converter\MusicConverter.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Converter\MusicConverter.cs" />
     <Compile Include="Converter\MusicInfo.cs" />
     <Compile Include="Playlist\M3uPlaylistReader.cs" />
     <Compile Include="MainForm.cs">
