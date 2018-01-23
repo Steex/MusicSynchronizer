@@ -224,7 +224,7 @@ namespace MusicSynchronizer
 
 				foreach (SongInfo song in args.Comparer.Songs.Where(s => s.State == SongState.New || s.State == SongState.Changed))
 				{
-					OperationResult stepResult = ConvertSong(song.SourcePath, song.TargetPath);
+					OperationResult stepResult = ProcessSong(song.SourcePath, song.TargetPath);
 					workResult = Utils.Max(workResult, stepResult);
 
 					songsConverted += 1;
@@ -245,7 +245,22 @@ namespace MusicSynchronizer
 			}
 		}
 
-		private static OperationResult ConvertSong(string sourcePath, string targetPath)
+
+		private static OperationResult ProcessSong(string sourcePath, string targetPath)
+		{
+			switch (Path.GetExtension(sourcePath))
+			{
+				case ".mp3":
+					return CopySong(sourcePath, targetPath);
+				case ".flac":
+					return ConvertSong(sourcePath, targetPath);
+				default:
+					Logger.WriteWarning("Skipping file with unknown format: \"{0}\"", sourcePath);
+					return OperationResult.SucceededWithWarnings;
+			}
+		}
+
+		private static OperationResult CopySong(string sourcePath, string targetPath)
 		{
 			try
 			{
@@ -279,6 +294,31 @@ namespace MusicSynchronizer
 				Logger.WriteError("Cannot convert \"{0}\": {1}", sourcePath, ex.Message);
 				return OperationResult.SucceededWithErrors;
 			}
+		}
+
+		private static OperationResult ConvertSong(string sourcePath, string targetPath)
+		{
+			string tmpPath = Path.GetTempFileName();
+
+			OperationResult result = DecodeFlac(sourcePath, tmpPath);
+			if (result <= OperationResult.SucceededWithWarnings)
+			{
+				result = Utils.Max(result, EncodeMp3(tmpPath, targetPath));
+			}
+
+			File.Delete(tmpPath);
+
+			return result;
+		}
+
+		private static OperationResult DecodeFlac(string sourcePath, string tmpPath)
+		{
+			return CopySong(sourcePath, tmpPath);
+		}
+
+		private static OperationResult EncodeMp3(string tmpPath, string targetPath)
+		{
+			return CopySong(tmpPath, targetPath);
 		}
 
 
