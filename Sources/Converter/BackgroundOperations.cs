@@ -298,16 +298,40 @@ namespace MusicSynchronizer
 
 		private static OperationResult ConvertSong(string sourcePath, string targetPath)
 		{
+			Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
+
+			// Create a temporary file.
 			string tmpPath = Path.GetTempFileName();
 
+			// Perform conversion.
 			OperationResult result = DecodeFlac(sourcePath, tmpPath);
 			if (result <= OperationResult.SucceededWithWarnings)
 			{
 				result = Utils.Max(result, EncodeMp3(tmpPath, targetPath));
 			}
 
+			// Delete the temporary file.
 			File.Delete(tmpPath);
 
+			// Report the result.
+			switch (result)
+			{
+				case OperationResult.Succeeded:
+					Logger.WriteLine("Successfully written \"{0}\"", targetPath);
+					break;
+				case OperationResult.SucceededWithWarnings:
+					Logger.WriteLine("Converted with warnings \"{0}\"", targetPath);
+					break;
+				case OperationResult.SucceededWithErrors:
+				case OperationResult.Failed:
+					Logger.WriteLine("Cannot convert \"{0}\"", sourcePath);
+					break;
+				default:
+					// nothing to report
+					break;
+			}
+
+			// Return the result.
 			return result;
 		}
 
@@ -332,7 +356,21 @@ namespace MusicSynchronizer
 
 		private static OperationResult EncodeMp3(string tmpPath, string targetPath)
 		{
-			return CopySong(tmpPath, targetPath);
+			ProcessStartInfo encodeInfo = new ProcessStartInfo();
+			encodeInfo.FileName = @"D:\Programs\Multimedia\LAME\lame.exe";
+			encodeInfo.Arguments = string.Format("-V2 \"{0}\" \"{1}\"", tmpPath, targetPath);
+			encodeInfo.CreateNoWindow = true;
+			encodeInfo.UseShellExecute = false;
+			//encodeInfo.RedirectStandardOutput = true;
+			//encodeInfo.RedirectStandardError = true;
+
+			Process encodeProcess = Process.Start(encodeInfo);
+			encodeProcess.WaitForExit();
+
+			//string outText = encodeProcess.StandardOutput.ReadToEnd();
+			//string errText = encodeProcess.StandardError.ReadToEnd();
+
+			return encodeProcess.ExitCode == 0 ? OperationResult.Succeeded : OperationResult.SucceededWithErrors;
 		}
 
 
