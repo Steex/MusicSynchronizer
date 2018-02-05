@@ -112,6 +112,35 @@ namespace MusicSynchronizer
 
 			BackgroundOperations.LogResult(result.Result, result.ErrorMessage);
 
+			switch (result.Result)
+			{
+				case BackgroundOperations.OperationResult.Canceled:
+				case BackgroundOperations.OperationResult.Failed:
+					return;
+				case BackgroundOperations.OperationResult.SucceededWithWarnings:
+				case BackgroundOperations.OperationResult.SucceededWithErrors:
+					if (Utils.ShowQuestion(null, msgContinueAfterProblems, MessageBoxButtons.YesNo) == DialogResult.No)
+					{
+						return;
+					}
+					break;
+			}
+
+			// Start to copy playlists.
+			Logger.WriteLine("Copy playlists...");
+
+			// Create a worker and show the conversion progress.
+			BackgroundWorker worker = BackgroundOperations.CreatePlaylistsCopier();
+			worker.RunWorkerCompleted += OnCopyPlaylistsComplete;
+			worker.RunWorkerAsync(new BackgroundOperations.CopyPlaylistsArguments(sourceFolder, targetFolder, comparer));
+		}
+
+		private void OnCopyPlaylistsComplete(object sender, RunWorkerCompletedEventArgs e)
+		{
+			BackgroundOperations.CopyPlaylistsResult result = (BackgroundOperations.CopyPlaylistsResult)e.Result;
+
+			BackgroundOperations.LogResult(result.Result, result.ErrorMessage);
+
 			comparer = null;
 
 			if (OnConverted != null)

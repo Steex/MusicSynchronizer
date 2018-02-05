@@ -52,10 +52,29 @@ namespace MusicSynchronizer
 
 	public class MusicComparer
 	{
+		private static readonly HashSet<string> playlistExtensions = new HashSet<string>{ ".m3u", ".m3u8" };
 		private static readonly HashSet<string> songExtensions = new HashSet<string>{ ".mp3", ".ogg", ".wma", ".aac", ".wav", "*.flac", ".ape", ".wv" };
 
+		private List<string> sourcePlaylists = new List<string>();
+		private List<string> targetPlaylists = new List<string>();
 		private List<SongInfo> combinedSongs = new List<SongInfo>();
 
+
+		public IEnumerable<string> SourcePlaylists
+		{
+			get
+			{
+				return sourcePlaylists;
+			}
+		}
+
+		public IEnumerable<string> TargetPlaylists
+		{
+			get
+			{
+				return targetPlaylists;
+			}
+		}
 
 		public IEnumerable<SongInfo> Songs
 		{
@@ -79,7 +98,10 @@ namespace MusicSynchronizer
 				targetRoot += "\\";
 			}
 
-			// Create list of all playlist files.
+			// Create list of source playlists.
+			sourcePlaylists = playlists.ToList();
+
+			// Create list of song in the playlists.
 			SortedDictionary<string, string> sourceSongs = new SortedDictionary<string, string>();
 
 			foreach (string playlistPath in playlists)
@@ -94,7 +116,7 @@ namespace MusicSynchronizer
 				}
 			}
 
-			// Create a list of all files in the target folder.
+			// Create a list of all songs in the target folder.
 			SortedDictionary<string, string> targetSongs = new SortedDictionary<string, string>();
 
 			IEnumerable<string> targetFiles = Directory.GetFiles(targetRoot, "*", SearchOption.AllDirectories);
@@ -104,6 +126,9 @@ namespace MusicSynchronizer
 			{
 				AddSongToList(songPath, targetRoot, targetSongs);
 			}
+
+			// Create list of target playlists.
+			targetPlaylists = targetFiles.Where(path => playlistExtensions.Contains(Path.GetExtension(path))).ToList();
 
 			// Compare source and target songs.
 			var itSource = sourceSongs.GetEnumerator();
