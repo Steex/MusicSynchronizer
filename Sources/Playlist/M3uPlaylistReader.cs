@@ -8,9 +8,12 @@ namespace MusicSynchronizer
 {
 	public class M3uPlaylistReader: IPlaylistReader
 	{
-		private List<string> songs = new List<string>();
+		private static readonly string FileHeader = "#EXTM3U";
+		private static readonly string InfoHeader = "#EXTINF:";
 
-		public IEnumerable<string> Songs
+		private List<PlaylistEntry> songs = new List<PlaylistEntry>();
+
+		public IEnumerable<PlaylistEntry> Songs
 		{
 			get { return songs; }
 		}
@@ -24,29 +27,53 @@ namespace MusicSynchronizer
 			string[] lines = File.ReadAllLines(path, encoding);
 
 			// Check the file is really a M3U playlist.
-			if (lines[0] != "#EXTM3U")
+			if (lines[0] != FileHeader)
 			{
 				throw new Exception("Bad format of playlist '" + path + "'.");
 			}
 
-			// Iterate through all song info in the playlist and populate the song list.
-			int entryCount = (lines.Length - 1) / 2;
-
-			for (int i = 0; i < entryCount; ++i)
+			// Iterate through all lines in the playlist and populate the song list.
+			IEnumerator<string> itLine = IterateNonEmptyLines(lines.Skip(1));
+			while (itLine.MoveNext())
 			{
-				// Extract a song path.
-				string songPath = lines[2 + i * 2];
+				string songTitle = null;
+				int songLength = 0;
+				string songPath = null;
 
-				// Make sure the song path is absolute, including a drive letter.
+				// Read the extrended info if it is available.
+				if (itLine.Current.StartsWith(InfoHeader))
+				{
+					int infoLength = InfoHeader.Length;
+					int commaPos = itLine.Current.IndexOf(',', infoLength);
+					songLength = int.Parse(itLine.Current.Substring(infoLength, commaPos - infoLength));
+					songTitle = itLine.Current.Substring(commaPos + 1);
+				}
+
+				itLine.MoveNext();
+
+				// Read the path and make sure it is absolute, including a drive letter.
+				songPath = itLine.Current;
 				if (songPath.StartsWith("\\"))
 				{
 					songPath = path.Substring(0, 2) + songPath;
 				}
 
-				songs.Add(songPath);
+				// Add the playlist entry.
+				songs.Add(new PlaylistEntry(songTitle, songLength, songPath));
 			}
 		}
 
+
+		private IEnumerator<string> IterateNonEmptyLines(IEnumerable<string> allLines)
+		{
+			foreach (string line in allLines)
+			{
+				if (!string.IsNullOrWhiteSpace(line))
+				{
+					yield return line;
+				}
+			}
+		}
 	}
 
 }

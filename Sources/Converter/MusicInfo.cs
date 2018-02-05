@@ -109,9 +109,9 @@ namespace MusicSynchronizer
 				IPlaylistReader playlist = PlaylistReaderFactory.CreateReader(playlistPath);
 				if (playlist != null)
 				{
-					foreach (string songPath in playlist.Songs.Where(s => Utils.IsPathRelative(s, sourceRoot)))
+					foreach (PlaylistEntry entry in playlist.Songs.Where(e => Utils.IsPathRelative(e.Path, sourceRoot)))
 					{
-						AddSongToList(songPath, sourceRoot, sourceSongs);
+						AddSongToList(entry.Path, sourceRoot, sourceSongs);
 					}
 				}
 			}
